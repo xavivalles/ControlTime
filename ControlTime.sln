@@ -13,7 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Travelport.AE.EventEmulator
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Travelport.AE.EventEmulator.Domain.Entities", "event-emulator-common\src\Travelport.AE.EventEmulator.Domain.Entities\Travelport.AE.EventEmulator.Domain.Entities.csproj", "{9685F31B-0F8D-4665-A3BD-85FA6F28E7F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlTime", "ControlTime\ControlTime.csproj", "{B38477CC-F3ED-4BFD-A824-A448E7EFA0C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlTime", "ControlTime\ControlTime.csproj", "{B38477CC-F3ED-4BFD-A824-A448E7EFA0C9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Travelport.AE.Common.Agents", "event-emulator-common\common\src\Travelport.AE.Common.Agents\Travelport.AE.Common.Agents.csproj", "{0BFC2107-7BE8-4F2C-BCCC-060261E7848E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Travelport.AE.Common.Web", "event-emulator-common\common\src\Travelport.AE.Common.Web\Travelport.AE.Common.Web.csproj", "{69EB2957-ADFB-4A5D-B6AD-2E433A274777}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Travelport.AE.Crosscutting", "event-emulator-common\common\src\Travelport.AE.Crosscutting\Travelport.AE.Crosscutting.csproj", "{B6228B44-8602-4E09-B1AA-B5B8D992564E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Travelport.AE.Crosscutting.Logging", "event-emulator-common\common\src\Travelport.AE.Crosscutting.Logging\Travelport.AE.Crosscutting.Logging.csproj", "{199A83E2-9D08-417C-8CC6-0B38CAFBCAC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +53,22 @@ Global
 		{B38477CC-F3ED-4BFD-A824-A448E7EFA0C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B38477CC-F3ED-4BFD-A824-A448E7EFA0C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B38477CC-F3ED-4BFD-A824-A448E7EFA0C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BFC2107-7BE8-4F2C-BCCC-060261E7848E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BFC2107-7BE8-4F2C-BCCC-060261E7848E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BFC2107-7BE8-4F2C-BCCC-060261E7848E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BFC2107-7BE8-4F2C-BCCC-060261E7848E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69EB2957-ADFB-4A5D-B6AD-2E433A274777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69EB2957-ADFB-4A5D-B6AD-2E433A274777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69EB2957-ADFB-4A5D-B6AD-2E433A274777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69EB2957-ADFB-4A5D-B6AD-2E433A274777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6228B44-8602-4E09-B1AA-B5B8D992564E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6228B44-8602-4E09-B1AA-B5B8D992564E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6228B44-8602-4E09-B1AA-B5B8D992564E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6228B44-8602-4E09-B1AA-B5B8D992564E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{199A83E2-9D08-417C-8CC6-0B38CAFBCAC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{199A83E2-9D08-417C-8CC6-0B38CAFBCAC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{199A83E2-9D08-417C-8CC6-0B38CAFBCAC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{199A83E2-9D08-417C-8CC6-0B38CAFBCAC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
