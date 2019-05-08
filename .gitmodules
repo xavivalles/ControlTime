@@ -1,0 +1,3 @@
+[submodule "event-emulator-common"]
+	path = event-emulator-common
+	url = https://agency-commerce.visualstudio.com/agency%20effectiveness/_git/agency-effectiveness-event-emulator-common
