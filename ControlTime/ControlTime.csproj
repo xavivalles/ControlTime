@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,11 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\event-emulator-common\common\src\Travelport.AE.DataAccess\Travelport.AE.DataAccess.csproj" />
     <ProjectReference Include="..\event-emulator-common\common\src\Travelport.AE.Domain.Entities\Travelport.AE.Domain.Entities.csproj" />
     <ProjectReference Include="..\event-emulator-common\common\src\Travelport.AE.Domain\Travelport.AE.Domain.csproj" />
     <ProjectReference Include="..\event-emulator-common\src\Travelport.AE.EventEmulator.Domain.Entities\Travelport.AE.EventEmulator.Domain.Entities.csproj" />
     <ProjectReference Include="..\event-emulator-common\src\Travelport.AE.EventEmulator.Domain\Travelport.AE.EventEmulator.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
