@@ -8,96 +8,115 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Travelport.AE.Domain.Interfaces;
 using Travelport.AE.Domain.Implementation;
+using System.Collections.Generic;
+using Travelport.AE.Domain.Entities;
+using System.Linq;
+using ControlTime.Models;
+using Travelport.AE.EventEmulator.Domain.Interfaces;
+using Travelport.AE.EventEmulator.Domain;
 
 namespace ControlTime
 {
-	class Program
-	{
-		private static IServiceProvider _serviceProvider;
+    class Program
+    {
+        private static IServiceProvider _serviceProvider;
 
-		static void Main(string[] args)
-		{
-			var configuration = GetConfiguration();
-			RegisterServices(configuration);
-			var eventService = _serviceProvider.GetService<IEventService>();
+        static void Main(string[] args)
+        {
+            var configuration = GetConfiguration();
+            RegisterServices(configuration);
+            var eventService = _serviceProvider.GetService<IEventService>();
+
             var events = eventService.GetAll();
-
+            var eventAndMinutes = new EventAndTime();
             if (args == null || args.Length == 0)
             {
-                args = RetrieveArgsFromConsole();
+                eventAndMinutes = RetrieveArgsFromConsole(events);
             }
 
-            //DisposeServices();
-		}
+            var ruleRepository = _serviceProvider.GetService<IRuleRepository>();
+            var getRulesForEvent = ruleRepository.GetAllRulesWithEventId(eventAndMinutes.EventId);
 
-		private static void RegisterServices(IConfiguration configuration)
-		{
-			var collection = new ServiceCollection();
-			collection.AddEntityFrameworkSqlServer()
-					.AddDbContext<AEContext>(contextBuilder =>
-					{
-						contextBuilder.UseSqlServer(configuration["Data:DefaultConnection"]);
-					})
-					.AddSingleton(c => configuration);
-			//collection.AddScoped<IContextFactory, ContextFactory>();
-			collection.AddScoped<IContextFactory, ContextFactory>();
-			collection.AddScoped<IRuleRepository, RuleRepository>();
-			collection.AddScoped<IEventRepository, EventRepository>();
-			collection.AddScoped<IEventService, EventService>();
-            
-            _serviceProvider = collection.BuildServiceProvider();
-		}
-
-		private static void DisposeServices()
-		{
-			if (_serviceProvider == null)
-			{
-				return;
-			}
-			if (_serviceProvider is IDisposable)
-			{
-				((IDisposable)_serviceProvider).Dispose();
-			}
-		}
-
-		private static IConfiguration GetConfiguration()
-		{
-			var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-			return builder.Build();
-		}
-
-        private static string[] RetrieveArgsFromConsole()
-        {
-            string[] args;
-            Console.WriteLine("Host:");
-            var host = Console.ReadLine();
-            Console.WriteLine("PCC:");
-            var pcc = Console.ReadLine();
-            Console.WriteLine("PNR:");
-            var pnr = Console.ReadLine();
-            Console.WriteLine("Provider:" + Environment.NewLine +
-                "1. Fare optimization." + Environment.NewLine +
-                "2. File Finishing." + Environment.NewLine +
-                "3. Quality Control." + Environment.NewLine +
-                "4. Queue Management." + Environment.NewLine +
-                "5. Schedule Changes." + Environment.NewLine +
-                "6. Ticketing");
-            var providerNumber = Console.ReadLine();
-            string provider = null;
-
-            switch (providerNumber)
+            var triggerFieldService = _serviceProvider.GetService<ITriggerFieldService>();
+            foreach (var rule in getRulesForEvent)
             {
-                case "1": provider = "FareOptimization"; break;
-                case "2": provider = "FileFinishing"; break;
-                case "3": provider = "QualityControl"; break;
-                case "4": provider = "QueueManagement"; break;
-                case "5": provider = "ScheduleChanges"; break;
-                case "6": provider = "ticketing"; break;
-                default: provider = String.Empty; break;
+                var containsIntervalFieldDB = rule.TriggerFields.Where(x => x.Key == "ExecutionIntervalInMinutes");
+                if (containsIntervalFieldDB == null)
+                {
+                    //var a = "creem la vulve";
+                    triggerFieldService.AddTriggerField(rule, eventAndMinutes.Time);
+                }
+                else
+                {
+                    var b = "s'actualitza le mamelons";
+                }
             }
-            string arguments = $"-h {host} -p {pcc} -n {pnr} -r {provider}";
-            args = arguments.Split(new char[] { ' ' });
-            return args;
+
+            DisposeServices();
+        }
+
+        private static void RegisterServices(IConfiguration configuration)
+        {
+            var collection = new ServiceCollection();
+            collection.AddEntityFrameworkSqlServer()
+                    .AddDbContext<AEContext>(contextBuilder =>
+                    {
+                        contextBuilder.UseSqlServer(configuration["Data:DefaultConnection"]);
+                    })
+                    .AddSingleton(c => configuration);
+            //collection.AddScoped<IContextFactory, ContextFactory>();
+            collection.AddScoped<IContextFactory, ContextFactory>();
+            collection.AddScoped<IRuleRepository, RuleRepository>();
+            collection.AddScoped<IEventRepository, EventRepository>();
+            collection.AddScoped<IEventService, EventService>();
+            collection.AddScoped<ITriggerFieldService, TriggerFieldService>();            
+
+            _serviceProvider = collection.BuildServiceProvider();
+        }
+
+        private static void DisposeServices()
+        {
+            if (_serviceProvider == null)
+            {
+                return;
+            }
+            if (_serviceProvider is IDisposable)
+            {
+                ((IDisposable)_serviceProvider).Dispose();
+            }
+        }
+
+        private static IConfiguration GetConfiguration()
+        {
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+            return builder.Build();
+        }
+
+        private static EventAndTime RetrieveArgsFromConsole(IEnumerable<Event> events)
+        {
+            var dictionaryEvents = new Dictionary<int, Event>();
+            var index = 0;
+            Console.WriteLine("What event you want update the interval execution?");
+            foreach (var evnt in events)
+            {
+                Console.WriteLine(String.Format("{0}. {1}", index, evnt.Name));
+                dictionaryEvents.Add(index, evnt);
+                index++;
+            }
+            var getEventIndex = Console.ReadLine();
+
+            Console.WriteLine("How much minutes you want for these events?");
+            var time = Console.ReadLine();
+
+            var eventId = GetEventId(dictionaryEvents, int.Parse(getEventIndex));
+            var EventAndMinutesObject = new EventAndTime { EventId= eventId, Time = int.Parse(time) };
+            return EventAndMinutesObject;
+        }
+
+        private static Guid GetEventId(Dictionary<int, Event> listEvents, int evntIndex)
+        {
+            var evnt = listEvents.FirstOrDefault(e => e.Key == evntIndex);
+            return evnt.Value.Id;
         }
     }
 }
